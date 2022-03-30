@@ -1,0 +1,21 @@
+{
+	"name": "abydorf-links",
+	"author": "",
+	"private": true,
+	"version": "0.0.1",
+	"main": "app.js",
+	"scripts": {
+		"debug": "netlify dev --inspect",
+		"minify-js": "uglifyjs js/main.js --compress --mangle --warn --output js/min.js",
+		"minify-css": "uglifycss css/main.css > css/min.css",
+		"dist": "npm run minify-js && npm run minify-css"
+	},
+	"dependencies": {
+		"dotenv": "^8.2.0",
+		"faunadb": "^4.5.4",
+		"minify": "^5.1.0",
+		"node-fetch": "^2.6.1",
+		"uglify-js": "^3.3.11",
+		"uglifycss": "^0.0.29"
+	}
+}
