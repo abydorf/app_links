@@ -55,21 +55,39 @@ a:active {
     margin-bottom: var(--space-xs);
 }
 
-@media (min-width: 1024px) {
+@media (min-width: 751px) {
     #add {
         flex-flow: row;
     }
     #add * {
+        flex: 1;
         margin: 0 var(--space-xs) 0 0;
+    }
+    #add button {
+        flex: 0;
+        margin-right: 0;
+        padding: var(--space-xs) var(--space-s);
     }
 }
 
 .tags {
-    margin-bottom: var(--space-m);
+    margin-bottom: var(--space-s);
 }
 .tags__title {
     border-bottom: 1px solid var(--color-white);
     font-weight: bold;
     margin-bottom: var(--space-s);
     text-shadow: rgba(0,0,0,.2) 2px 2px;
+}
+.tags__link {
+    line-height: 20px;
+}
+.tags__link:not(:last-child) {
+    margin-bottom: var(--space-s);
+}
+.tags__href {
+    display: block;
+}
+.tags__url {
+    font: italic 13px 'Courier New', Courier, monospace;
 }

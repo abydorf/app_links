@@ -65,7 +65,13 @@ function getDropdownValues(tags) {
 function getLinksHTML(links, tagName) {
     let html = `<dt class="tags__title">${tagName}</dt>`;
     for (let i = 0; i < links.length; i++) {
-        html += `<dd><a href="${links[i].url}">${links[i].title}</a></dd>`;
+        html += `
+            <dd class="tags__link">
+                <a href="${links[i].url}" class="tags__href">
+                    ${links[i].title}<br>
+                    <span class="tags__url">${links[i].url.toString().substring(0,35)}…</span>
+                </a>
+            </dd>`;
     }
     return html;
 }
@@ -80,8 +86,25 @@ function saveLink(data) {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ data }),
-    });
+    })
+        .then(response => response.json())
+        .then(function(data) {
+            reload(data);
+        });
     return false;
+}
+
+/**
+ * @todo smoothly reload section where link has been saved instead of whole page
+ * @param {object} data the response data for the save database call
+ */
+function reload(data) {
+    if (data.hasOwnProperty('ts')) {
+        Array.from(document.querySelectorAll('input[type=text], input[type=url]')).forEach(function(element) {
+            element.value = '';
+        });
+        window.location.reload();
+    }
 }
 
 /**
@@ -126,7 +149,6 @@ function renderLoadingIndicator() {
             Array.from(document.querySelectorAll('[data-tagid]')).forEach(function(container) {
                 if (container.dataset.tagid === tagId) {
                     tagContainer = container;
-                    console.log(tagContainer)
                 }
             });
             fetch(`/.netlify/functions/links?tagid=${tagId}`)
