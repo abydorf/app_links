@@ -33,10 +33,11 @@ function render(template, node) {
 function getTagsHTML(tags) {
     let html = '';
     for (let i = 0; i < tags.length; i++) {
-        html += `<dl class="tags ${tags[i].data.name}" data-tagid="${tags[i].ref['@ref'].id}">
-            <dt>${tags[i].data.name}</dt>
-            <dd>${renderLoadingIndicator()}</dd>
-        </dl>`;
+        html += `
+            <dl class="tags ${tags[i].data.name}" data-tagid="${tags[i].ref['@ref'].id}">
+                <dt>${tags[i].data.name}</dt>
+                <dd>${renderLoadingIndicator()}</dd>
+            </dl>`;
     }
     return html;
 }
@@ -65,12 +66,14 @@ function getDropdownValues(tags) {
 function getLinksHTML(links, tagName) {
     let html = `<dt class="tags__title">${tagName}</dt>`;
     for (let i = 0; i < links.length; i++) {
+        console.log(links[i])
         html += `
-            <dd class="tags__link">
-                <a href="${links[i].url}" class="tags__href">
+            <dd class="link">
+                <a href="${links[i].url}" class="link__href">
                     ${links[i].title}<br>
-                    <span class="tags__url">${links[i].url.toString().substring(0,35)}…</span>
+                    <span class="link__url">${links[i].url.toString().substring(0,35)}…</span>
                 </a>
+                <button class="link__delete" data-id="${links[i].id}">${renderDeleteIcon()}</button>
             </dd>`;
     }
     return html;
@@ -114,6 +117,10 @@ function renderLoadingIndicator() {
     return '<svg xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid" viewBox="0 0 100 100" class="loading-indicator" style="height:30px;width:30px"><circle cx="50" cy="50" r="35" fill="none" stroke="#d1d1d1" stroke-dasharray="164.93361431 56.97787144" stroke-width="5"><animateTransform attributeName="transform" dur="1s" keyTimes="0;1" repeatCount="indefinite" type="rotate" values="0 50 50;360 50 50"/></circle></svg>';
 }
 
+function renderDeleteIcon() {
+    return '<svg width="20" height="20" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M28.9859 5.90912L19.8961 14.9999L28.9859 24.0903C30.338 25.4429 30.338 27.634 28.9859 28.9865C28.3104 29.6621 27.4247 30.0002 26.5394 30.0002C25.6527 30.0002 24.7669 29.6626 24.0918 28.9865L15 19.8951L5.90891 28.9865C5.23343 29.662 4.34764 30.0001 3.4616 30.0001C2.57581 30.0001 1.69062 29.6625 1.01454 28.9865C-0.337521 27.6345 -0.337521 25.4434 1.01454 24.0903L10.1041 14.9999L1.01403 5.90912C-0.338038 4.55704 -0.338038 2.36551 1.01403 1.01343C2.36584 -0.33761 4.55606 -0.33761 5.90839 1.01343L14.9999 10.1043L24.0908 1.01343C25.4434 -0.33761 27.6339 -0.33761 28.9854 1.01343C30.338 2.36551 30.338 4.55704 28.9859 5.90912Z" fill="#fff"/></svg>';
+}
+
 (() => {
 
     const submitButton = document.querySelector('#add button');
@@ -155,11 +162,13 @@ function renderLoadingIndicator() {
                 .then(response => response.json())
                 .then(function(data) {
                     let links = [];
+                    //console.log(data.data);
                     for (let i = 0; i < data.data.length; i++) {
                         links.push({ 
                             'tagId': tagId,
                             'url': data.data[i].data.url,
-                            'title': data.data[i].data.title
+                            'title': data.data[i].data.title,
+                            'id': data.data[i].ref['@ref'].id
                         });
                     }
                     render(getLinksHTML(links, tagName), tagContainer);

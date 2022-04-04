@@ -79,15 +79,22 @@ a:active {
     margin-bottom: var(--space-s);
     text-shadow: rgba(0,0,0,.2) 2px 2px;
 }
-.tags__link {
+.link {
+    display: flex;
     line-height: 20px;
 }
-.tags__link:not(:last-child) {
+.link:not(:last-child) {
     margin-bottom: var(--space-s);
 }
-.tags__href {
+.link__href {
     display: block;
 }
-.tags__url {
+.link__url {
     font: italic 13px 'Courier New', Courier, monospace;
+}
+.link__delete {
+    background: none;
+    border: none;
+    margin-left: auto;
+    opacity: .25;
 }
