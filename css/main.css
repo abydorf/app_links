@@ -98,3 +98,6 @@ a:active {
     margin-left: auto;
     opacity: .25;
 }
+.link__delete svg {
+    pointer-events: none;
+}

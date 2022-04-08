@@ -66,7 +66,6 @@ function getDropdownValues(tags) {
 function getLinksHTML(links, tagName) {
     let html = `<dt class="tags__title">${tagName}</dt>`;
     for (let i = 0; i < links.length; i++) {
-        console.log(links[i])
         html += `
             <dd class="link">
                 <a href="${links[i].url}" class="link__href">
@@ -89,6 +88,24 @@ function saveLink(data) {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ data }),
+    })
+        .then(response => response.json())
+        .then(function(data) {
+            reload(data);
+        });
+    return false;
+}
+
+/**
+ * to delete the link in the database
+ * @param {string} id the id of the link to be deleted
+ * @returns void
+ */
+function deleteLink(id) {
+    fetch(`/.netlify/functions/links/tags`, {
+        method: 'DELETE',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id }),
     })
         .then(response => response.json())
         .then(function(data) {
@@ -162,7 +179,6 @@ function renderDeleteIcon() {
                 .then(response => response.json())
                 .then(function(data) {
                     let links = [];
-                    //console.log(data.data);
                     for (let i = 0; i < data.data.length; i++) {
                         links.push({ 
                             'tagId': tagId,
@@ -172,6 +188,11 @@ function renderDeleteIcon() {
                         });
                     }
                     render(getLinksHTML(links, tagName), tagContainer);
+                    Array.from(document.querySelectorAll('.link__delete')).forEach(function(element) {
+                        element.addEventListener('click', function(e) {
+                            deleteLink(e.target.dataset.id);
+                        });
+                    })
                 });
         });
     }

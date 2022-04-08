@@ -92,10 +92,28 @@ exports.handler = async (event, context) => {
 						}
 					});
 			}
-        case 'PUT':
-            console.log('PUT');
         case 'DELETE':
-            console.log('DELETE');
+			const id = JSON.parse(event.body).id;
+			return client
+				.query(
+					q.Delete(
+						q.Ref(
+							q.Collection('Links'), id
+						)
+					)
+				)
+				.then(response => {
+					return {
+						statusCode: 200,
+						body: JSON.stringify(response)
+					}
+				})
+				.catch(error => {
+					return {
+						statusCode: 400,
+						body: JSON.stringify(error)
+					}
+				});
         default:
             console.log('DEFAULT');
 	}
